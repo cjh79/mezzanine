@@ -94,9 +94,8 @@ class Page(BasePage, ContentTyped):
         ``Page`` instance, so that all fields defined on the subclass
         are available for generating the description.
         """
-        if self.__class__ == Page:
-            if self.content_model:
-                return self.get_content_model().description_from_content()
+        if self.__class__ == Page and self.content_model:
+            return self.get_content_model().description_from_content()
         return super(Page, self).description_from_content()
 
     def get_ascendants(self, for_user=None):
@@ -128,7 +127,7 @@ class Page(BasePage, ContentTyped):
             # recursively.
             child = self
             while child.parent_id is not None:
-                self._ascendants.append(child.parent)
+                child._ascendants.append(child.parent)
                 child = child.parent
         return self._ascendants
 
@@ -259,7 +258,7 @@ class Page(BasePage, ContentTyped):
     def in_menu_template(self, template_name):
         if self.in_menus is not None:
             for i, l, t in settings.PAGE_MENU_TEMPLATES:
-                if not str(i) in self.in_menus and t == template_name:
+                if str(i) not in self.in_menus and t == template_name:
                     return False
         return True
 

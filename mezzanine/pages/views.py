@@ -88,9 +88,9 @@ def page(request, slug, template=u"pages/page.html", extra_context=None):
         templates.append(u"pages/%s/%s.html" % (template_name,
             request.page.content_model))
     for parent in request.page.get_ascendants(for_user=request.user):
-        parent_template_name = str(parent.slug)
         # Check for a template matching the page's content model.
         if request.page.content_model is not None:
+            parent_template_name = str(parent.slug)
             templates.append(u"pages/%s/%s.html" % (parent_template_name,
                 request.page.content_model))
     # Check for a template matching the page's content model.

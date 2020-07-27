@@ -32,10 +32,7 @@ class MenusField(MultiChoiceField):
         if self._overridden_default:
             # Even with user-provided default we'd rather not have it
             # forced to text. Compare with Field.get_default().
-            if callable(self.default):
-                default = self.default()
-            else:
-                default = self.default
+            default = self.default() if callable(self.default) else self.default
         else:
             # Depending on PAGE_MENU_TEMPLATES_DEFAULT:
             # * None or no value: all choosable menus;

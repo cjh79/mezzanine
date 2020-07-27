@@ -203,21 +203,25 @@ class FetchFromCacheMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        if (cache_installed() and request.method == "GET" and
-                not is_authenticated(request.user)):
-            cache_key = cache_key_prefix(request) + request.get_full_path()
-            response = cache_get(cache_key)
-            # We need to force a csrf token here, as new sessions
-            # won't receieve one on their first request, with cache
-            # middleware running.
-            if csrf_middleware_installed():
-                csrf_mw = CsrfViewMiddleware()
-                csrf_mw.process_view(request, lambda x: None, None, None)
-                get_token(request)
-            if response is None:
-                request._update_cache = True
-            else:
-                return HttpResponse(response)
+        if (
+            not cache_installed()
+            or request.method != "GET"
+            or is_authenticated(request.user)
+        ):
+            return
+        cache_key = cache_key_prefix(request) + request.get_full_path()
+        response = cache_get(cache_key)
+        # We need to force a csrf token here, as new sessions
+        # won't receieve one on their first request, with cache
+        # middleware running.
+        if csrf_middleware_installed():
+            csrf_mw = CsrfViewMiddleware()
+            csrf_mw.process_view(request, lambda x: None, None, None)
+            get_token(request)
+        if response is None:
+            request._update_cache = True
+        else:
+            return HttpResponse(response)
 
 
 class SSLRedirectMiddleware(MiddlewareMixin):

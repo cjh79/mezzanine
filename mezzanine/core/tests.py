@@ -76,8 +76,7 @@ class CoreTests(TestCase):
         """
         Run pyflakes/pep8 across the code base to check for potential errors.
         """
-        warnings = []
-        warnings.extend(run_pyflakes_for_package("mezzanine"))
+        warnings = list(run_pyflakes_for_package("mezzanine"))
         warnings.extend(run_pep8_for_package("mezzanine"))
         if warnings:
             self.fail("Syntax warnings!\n\n%s" % "\n".join(warnings))

@@ -206,10 +206,12 @@ class Settings(object):
 
             # If a setting is defined both in the database and in settings.py,
             # raise a warning and use the value defined in settings.py.
-            if hasattr(django_settings, setting["name"]):
-                if setting_value != setting["default"]:
-                    conflicting_settings.append(setting_obj.name)
-                    continue
+            if (
+                hasattr(django_settings, setting["name"])
+                and setting_value != setting["default"]
+            ):
+                conflicting_settings.append(setting_obj.name)
+                continue
 
             # If nothing went wrong, use the value from the database!
             new_cache[setting["name"]] = setting_value

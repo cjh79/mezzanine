@@ -51,11 +51,14 @@ def build_settings_docs(docs_path, prefix=None):
         settings_name = "``%s``" % name
         settings_label = ".. _%s:" % name
         setting_default = setting["default"]
-        if isinstance(setting_default, str):
-            if gethostname() in setting_default or (
-                setting_default.startswith("/") and
-                    os.path.exists(setting_default)):
-                setting_default = dynamic
+        if isinstance(setting_default, str) and (
+            gethostname() in setting_default
+            or (
+                setting_default.startswith("/")
+                and os.path.exists(setting_default)
+            )
+        ):
+            setting_default = dynamic
         if setting_default != dynamic:
             setting_default = repr(deep_force_unicode(setting_default))
         lines.extend(["", settings_label])
@@ -209,14 +212,13 @@ def build_changelog(docs_path, package_name="mezzanine"):
                 continue
         user = cs.user().decode("utf-8").split("<")[0].strip()
         entry = "%s - %s" % (description, user)
-        if hotfix or entry not in versions[version]["changes"]:
-            if hotfix:
-                versions[hotfix] = {
-                    "changes": [entry],
-                    "date": _changeset_date(cs).strftime("%b %d, %Y"),
-                }
-            else:
-                versions[version]["changes"].insert(0, entry)
+        if hotfix:
+            versions[hotfix] = {
+                "changes": [entry],
+                "date": _changeset_date(cs).strftime("%b %d, %Y"),
+            }
+        elif entry not in versions[version]["changes"]:
+            versions[version]["changes"].insert(0, entry)
 
     # Write out the changelog.
     with open(changelog_file, "w") as f:
@@ -289,7 +291,6 @@ def build_requirements(docs_path, package_name="mezzanine"):
     """
     Updates the requirements file with Mezzanine's version number.
     """
-    mezz_string = "Mezzanine=="
     project_path = os.path.join(docs_path, "..")
     requirements_file = os.path.join(project_path, package_name,
                                      "project_template", "requirements.txt")
@@ -297,6 +298,7 @@ def build_requirements(docs_path, package_name="mezzanine"):
         requirements = f.readlines()
     with open(requirements_file, "w") as f:
         f.write("Mezzanine==%s\n" % __version__)
+        mezz_string = "Mezzanine=="
         for requirement in requirements:
             if requirement.strip() and not requirement.startswith(mezz_string):
                 f.write(requirement)

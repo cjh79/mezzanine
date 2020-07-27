@@ -114,10 +114,7 @@ def copy_test_to_media(module, name):
     to_dir = os.path.dirname(to_path)
     if not os.path.exists(to_dir):
         os.makedirs(to_dir)
-    if os.path.isdir(test_path):
-        copy = copytree
-    else:
-        copy = copyfile
+    copy = copytree if os.path.isdir(test_path) else copyfile
     try:
         copy(test_path, to_path)
     except OSError:

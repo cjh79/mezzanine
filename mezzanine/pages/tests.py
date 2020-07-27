@@ -275,9 +275,9 @@ class PagesTests(TestCase):
         Test that rendering a page menu without a template name or
         context["menu_template_name"] raises a TemplateSystemError.
         """
-        template = ('{% load pages_tags %}'
-                    '{% page_menu %}')
         with self.assertRaises(TemplateSyntaxError):
+            template = ('{% load pages_tags %}'
+                        '{% page_menu %}')
             Template(template).render(Context({}))
 
     def test_page_menu_slug_home(self):

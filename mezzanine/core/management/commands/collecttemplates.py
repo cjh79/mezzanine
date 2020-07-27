@@ -89,10 +89,7 @@ class Command(BaseCommand):
                                   "\n" % (name, path, dest))
             copy = True
             if options.get("interactive") and os.path.exists(dest):
-                if name in template_src:
-                    prev = ' [copied from %s]' % template_src[name]
-                else:
-                    prev = ''
+                prev = ' [copied from %s]' % template_src[name] if name in template_src else ''
                 self.stdout.write("While copying %s [from %s]:\n" %
                                   (name, app))
                 self.stdout.write("Template exists%s.\n" % prev)

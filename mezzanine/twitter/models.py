@@ -112,13 +112,12 @@ class Query(models.Model):
                 tweet.full_name = tweet_json['user']['name']
                 tweet.profile_image_url = \
                         tweet_json['user']["profile_image_url"]
-                date_format = "%a %b %d %H:%M:%S +0000 %Y"
             else:
                 user = tweet_json["user"]
                 tweet.user_name = user["screen_name"]
                 tweet.full_name = user["name"]
                 tweet.profile_image_url = user["profile_image_url"]
-                date_format = "%a %b %d %H:%M:%S +0000 %Y"
+            date_format = "%a %b %d %H:%M:%S +0000 %Y"
             tweet.text = urlize(tweet_json["text"])
             tweet.text = re_usernames.sub(replace_usernames, tweet.text)
             tweet.text = re_hashtags.sub(replace_hashtags, tweet.text)

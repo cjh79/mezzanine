@@ -49,9 +49,8 @@ class Command(BaseImporterCommand):
             """
             Converts post BlogML element into post data.
             """
-            post_dict = dict()
-            post_dict["title"] = post_element.find("blogml:title",
-                                                   namespaces=ns).text
+            post_dict = {"title": post_element.find("blogml:title",
+                                                   namespaces=ns).text}
             post_dict["content"] = post_element.find("blogml:content",
                                                      namespaces=ns).text
             post_dict["post-url"] = post_element.attrib["post-url"]
@@ -65,9 +64,8 @@ class Command(BaseImporterCommand):
                     namespaces=ns
                 )
                 ]
-            post_dict["categories"] = list(
-                (blog_categories[category_id] for category_id in
-                 post_category_refs))
+            post_dict["categories"] = [blog_categories[category_id] for category_id in
+                     post_category_refs]
             post_dict["tags"] = [x.attrib["ref"] for x in
                                  post_element.findall("blogml:tags/blogml:tag",
                                                       namespaces=ns)
@@ -78,13 +76,15 @@ class Command(BaseImporterCommand):
             """
             Converts comment BlogML element into comment data.
             """
-            comment_dict = dict()
-            comment_dict["name"] = comment_element.attrib["user-name"]
-            comment_dict["email"] = comment_element.attrib["user-email"]
-            comment_dict["pub_date"] = parse(
-                comment_element.attrib["date-created"]
-            ).replace(tzinfo=set_tz)
-            comment_dict["website"] = comment_element.attrib["user-url"]
+            comment_dict = {
+                "name": comment_element.attrib["user-name"],
+                "email": comment_element.attrib["user-email"],
+                "pub_date": parse(comment_element.attrib["date-created"]).replace(
+                    tzinfo=set_tz
+                ),
+                "website": comment_element.attrib["user-url"],
+            }
+
             comment_dict["body"] = comment_element.find("blogml:content",
                     namespaces=ns).text
             return comment_dict
@@ -99,8 +99,7 @@ class Command(BaseImporterCommand):
             cat_title_txt = tuple(
                 (x.find("blogml:title", namespaces=ns).text
                  for x in cat_elements))
-            categories_dict = dict(zip(cat_ids, cat_title_txt))
-            return categories_dict
+            return dict(zip(cat_ids, cat_title_txt))
 
         categories_found = _process_categories(tree)
         posts_found = tree.findall(search_paths["find_posts"], namespaces=ns)

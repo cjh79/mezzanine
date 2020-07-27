@@ -134,11 +134,13 @@ class SettingsForm(forms.Form):
         Format the setting's description into HTML.
         """
         for bold in ("``", "*"):
-            parts = []
             if description is None:
                 description = ""
-            for i, s in enumerate(description.split(bold)):
-                parts.append(s if i % 2 == 0 else "<b>%s</b>" % s)
+            parts = [
+                s if i % 2 == 0 else "<b>%s</b>" % s
+                for i, s in enumerate(description.split(bold))
+            ]
+
             description = "".join(parts)
         description = urlize(description, autoescape=False)
         return mark_safe(description.replace("\n", "<br>"))

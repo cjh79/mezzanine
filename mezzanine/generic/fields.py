@@ -211,9 +211,9 @@ class KeywordsField(BaseGenericRelation):
         ``KEYWORDS_FIELD_string`` field in ``search_fields``.
         """
         super(KeywordsField, self).contribute_to_class(cls, name)
-        string_field_name = list(self.fields.keys())[0] % \
-                            self.related_field_name
         if hasattr(cls, "search_fields") and name in cls.search_fields:
+            string_field_name = list(self.fields.keys())[0] % \
+                                self.related_field_name
             try:
                 weight = cls.search_fields[name]
             except TypeError:

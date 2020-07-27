@@ -25,7 +25,7 @@ class GalleriesTests(TestCase):
         gallery = Gallery.objects.create(title=title, zip_import=zip_name)
         images = list(gallery.images.all())
         self.assertTrue(images)
-        self.assertTrue(all([image.description for image in images]))
+        self.assertTrue(all(image.description for image in images))
         # Clean up.
         rmtree(os.path.join(settings.MEDIA_ROOT,
                             GALLERIES_UPLOAD_DIR, title))

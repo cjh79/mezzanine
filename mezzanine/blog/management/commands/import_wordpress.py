@@ -78,6 +78,7 @@ class Command(BaseImporterCommand):
                                      categories=terms["category"],
                                      old_url=entry.get('link', entry.id))
 
+                fmt = "%Y-%m-%d %H:%M:%S"
                 # Get the comments from the xml doc.
                 for c in xmlitem.getElementsByTagName("wp:comment"):
                     name = self.get_text(c, "author")
@@ -85,7 +86,6 @@ class Command(BaseImporterCommand):
                     url = self.get_text(c, "author_url")
                     body = self.get_text(c, "content")
                     pub_date = self.get_text(c, "date_gmt")
-                    fmt = "%Y-%m-%d %H:%M:%S"
                     pub_date = datetime.strptime(pub_date, fmt)
                     pub_date -= timedelta(seconds=timezone)
                     self.add_comment(post=post, name=name, email=email,

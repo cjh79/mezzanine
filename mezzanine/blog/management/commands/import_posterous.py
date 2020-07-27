@@ -50,8 +50,7 @@ class Command(BaseImporterCommand):
         if r.text.startswith("403"):
             raise CommandError(r.text)
         try:
-            response = json.loads(r.text)
-            return response
+            return json.loads(r.text)
         except:
             raise CommandError(r.text)
 

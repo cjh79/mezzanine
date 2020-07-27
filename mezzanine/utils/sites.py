@@ -53,15 +53,15 @@ def current_site_id():
                 bits = (settings.CACHE_MIDDLEWARE_KEY_PREFIX, domain)
                 cache_key = "%s.site_id.%s" % bits
                 site_id = cache_get(cache_key)
-            if not site_id:
-                try:
-                    site = Site.objects.get(domain__iexact=domain)
-                except Site.DoesNotExist:
-                    pass
-                else:
-                    site_id = site.id
-                    if cache_installed():
-                        cache_set(cache_key, site_id)
+        if not site_id:
+            try:
+                site = Site.objects.get(domain__iexact=domain)
+            except Site.DoesNotExist:
+                pass
+            else:
+                site_id = site.id
+                if cache_installed():
+                    cache_set(cache_key, site_id)
     if not site_id:
         site_id = os.environ.get("MEZZANINE_SITE_ID", settings.SITE_ID)
     if request and site_id and not getattr(settings, "TESTING", False):

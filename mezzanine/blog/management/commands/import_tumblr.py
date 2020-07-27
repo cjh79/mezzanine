@@ -115,7 +115,7 @@ class Command(BaseImporterCommand):
     def handle_photo_post(self, post):
         title = title_from_content(post["photo-caption"])
         content = '<p><img src="%(photo-url-400)s"></p>%(photo-caption)s'
-        content = content % post
+        content %= post
         return title, content
 
     def handle_conversation_post(self, post):
